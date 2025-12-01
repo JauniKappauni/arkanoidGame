@@ -1,4 +1,6 @@
 #include <raylib.h>
+#define ROWS_OF_BLOCKS 5
+#define COLUMNS_OF_BLOCKS 3
 
 int screenWidth = 800;
 int screenHeight = 400;
@@ -12,6 +14,31 @@ float ballY = 200.0f;
 float ballR = 5.0f;
 float ballSpeedX = 300.0f;
 float ballSpeedY = 300.0f;
+
+float blockWidth = 50.0f;
+float blockHeight = 25.0f;
+float blockSpace = 5.0f;
+
+class block
+{
+private:
+    Vector2 pos;
+    bool active;
+
+public:
+    block(Vector2 x, bool active);
+    ~block();
+};
+
+block::block(Vector2 x, bool y)
+{
+    pos = x;
+    active = y;
+}
+
+block::~block()
+{
+}
 
 int main()
 {
@@ -49,8 +76,18 @@ int main()
         {
             ballSpeedX *= -1;
         }
-        EndDrawing();
+        for (int i = 0; i < ROWS_OF_BLOCKS; i++)
+        {
+            for (int j = 0; j < COLUMNS_OF_BLOCKS; j++)
+            {
+                float x = blockSpace + i * (blockWidth + blockSpace);
+                float y = blockSpace + j * (blockHeight + blockSpace);
+
+                DrawRectangle(x, y, blockWidth, blockHeight, WHITE);
+            }
+            EndDrawing();
+        }
+        CloseWindow();
+        return 0;
     }
-    CloseWindow();
-    return 0;
 }
