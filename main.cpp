@@ -1,6 +1,8 @@
 #include <raylib.h>
+#include <string>
+using namespace std;
 #define ROWS_OF_BLOCKS 5
-#define COLUMNS_OF_BLOCKS 3
+#define COLUMNS_OF_BLOCKS 14
 
 int screenWidth = 800;
 int screenHeight = 400;
@@ -18,6 +20,8 @@ float ballSpeedY = 300.0f;
 float blockWidth = 50.0f;
 float blockHeight = 25.0f;
 float blockSpace = 5.0f;
+
+int score = 0;
 
 class block
 {
@@ -116,9 +120,12 @@ int main()
                 {
                     b->deactive();
                     ballSpeedY *= -1;
+                    score++;
                 }
             }
         }
+        string scoreStr = to_string(score);
+        DrawText(scoreStr.data(), 10, 10, 25, RED);
         EndDrawing();
     }
     CloseWindow();
