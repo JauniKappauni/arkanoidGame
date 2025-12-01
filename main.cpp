@@ -28,6 +28,18 @@ private:
 public:
     block(Vector2 x, bool active);
     ~block();
+    bool isActive()
+    {
+        return active;
+    }
+    void deactive()
+    {
+        active = false;
+    }
+    Vector2 getPos()
+    {
+        return pos;
+    }
 };
 
 block::block(Vector2 x, bool y)
@@ -40,14 +52,27 @@ block::~block()
 {
 }
 
+block *blocks[ROWS_OF_BLOCKS][COLUMNS_OF_BLOCKS];
+
 int main()
 {
     InitWindow(screenWidth, screenHeight, "Arkanoid");
+    for (int i = 0; i < ROWS_OF_BLOCKS; i++)
+    {
+        for (int j = 0; j < COLUMNS_OF_BLOCKS; j++)
+        {
+            float x = blockSpace + j * (blockWidth + blockSpace);
+            float y = blockSpace + i * (blockHeight + blockSpace);
+            blocks[i][j] = new block({x, y}, true);
+        }
+    }
     while (!WindowShouldClose())
     {
         float dt = GetFrameTime();
         BeginDrawing();
+
         ClearBackground(BLACK);
+
         DrawLine(posX, 390, posX + 100, 390, WHITE);
         if (IsKeyDown(KEY_A) && posX > 0)
         {
@@ -80,14 +105,22 @@ int main()
         {
             for (int j = 0; j < COLUMNS_OF_BLOCKS; j++)
             {
-                float x = blockSpace + i * (blockWidth + blockSpace);
-                float y = blockSpace + j * (blockHeight + blockSpace);
+                block *b = blocks[i][j];
+                if (!b->isActive())
+                    continue;
 
-                DrawRectangle(x, y, blockWidth, blockHeight, WHITE);
+                Vector2 pos = b->getPos();
+
+                DrawRectangle(pos.x, pos.y, blockWidth, blockHeight, WHITE);
+                if (ballX >= pos.x && ballX <= pos.x + blockWidth && ballY > pos.y && ballY < pos.y + blockHeight)
+                {
+                    b->deactive();
+                    ballSpeedY *= -1;
+                }
             }
-            EndDrawing();
         }
-        CloseWindow();
-        return 0;
+        EndDrawing();
     }
+    CloseWindow();
+    return 0;
 }
