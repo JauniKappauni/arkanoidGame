@@ -77,15 +77,22 @@ int main()
         if (!isGameStarted)
         {
             Vector2 mouse = GetMousePosition();
-            Rectangle btn = {300, 150, 200, 100};
+            Rectangle btn = {300, 100, 200, 100};
+            Rectangle btn2 = {300, 250, 200, 100};
             BeginDrawing();
             ClearBackground(BLACK);
             DrawRectangleRec(btn, GRAY);
-            DrawText("Start", 380, 180, 20, WHITE);
+            DrawRectangleRec(btn2, GRAY);
+            DrawText("Start", 370, 150, 20, WHITE);
+            DrawText("Quit", 370, 300, 20, WHITE);
             EndDrawing();
             if (CheckCollisionPointRec(mouse, btn) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
             {
                 isGameStarted = true;
+            }
+            if (CheckCollisionPointRec(mouse, btn2) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+            {
+                CloseWindow();
             }
             continue;
         }
@@ -155,7 +162,25 @@ int main()
         }
         else
         {
-            CloseWindow();
+            Vector2 mouse = GetMousePosition();
+            Rectangle btn = {300, 100, 200, 100};
+            Rectangle btn2 = {300, 250, 200, 100};
+            BeginDrawing();
+            ClearBackground(BLACK);
+            DrawRectangleRec(btn, GRAY);
+            DrawRectangleRec(btn2, GRAY);
+            DrawText("Start", 370, 150, 20, WHITE);
+            DrawText("Quit", 370, 300, 20, WHITE);
+            EndDrawing();
+            if (CheckCollisionPointRec(mouse, btn) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+            {
+                isGameStarted = true;
+            }
+            if (CheckCollisionPointRec(mouse, btn2) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+            {
+                CloseWindow();
+            }
+            continue;
         }
     }
     CloseWindow();
