@@ -14,8 +14,8 @@ float speed = 500.0f;
 float ballX = 400.0f;
 float ballY = 200.0f;
 float ballR = 5.0f;
-float ballSpeedX = 300.0f;
-float ballSpeedY = 300.0f;
+float ballSpeedX = 200.0f;
+float ballSpeedY = 200.0f;
 
 float blockWidth = 50.0f;
 float blockHeight = 25.0f;
@@ -25,6 +25,10 @@ int score = 0;
 int lives = 3;
 bool isGameStarted = false;
 bool startLoop = false;
+
+float timerStart = 0.0f;
+int countdown = 3;
+bool countdownActive = false;
 
 class block
 {
@@ -60,6 +64,7 @@ block::~block()
 }
 
 block *blocks[ROWS_OF_BLOCKS][COLUMNS_OF_BLOCKS];
+int quantity = ROWS_OF_BLOCKS * COLUMNS_OF_BLOCKS;
 
 int main()
 {
@@ -99,18 +104,59 @@ int main()
         }
         if (!startLoop)
         {
-            if (!startLoop)
+            BeginDrawing();
+            ClearBackground(BLACK);
+            DrawText("Press Space to start game loop", 400, 200, 20, WHITE);
+            if (IsKeyPressed(KEY_SPACE))
             {
-                BeginDrawing();
-                ClearBackground(BLACK);
-                DrawText("Press Space to start game loop", 400, 200, 20, WHITE);
-                if (IsKeyPressed(KEY_SPACE))
-                {
-                    startLoop = true;
-                }
-                EndDrawing();
-                continue;
+                startLoop = true;
             }
+            EndDrawing();
+            continue;
+        }
+        if (score == quantity)
+        {
+            if (!countdownActive)
+            {
+                countdownActive = true;
+                timerStart = GetTime();
+                countdown = 3;
+            }
+            float elapsed = GetTime() - timerStart;
+
+            if (elapsed >= 1.0f)
+            {
+                countdown--;
+                timerStart = GetTime();
+            }
+            BeginDrawing();
+            ClearBackground(BLACK);
+            DrawText("You won!", 400, 200, 20, WHITE);
+            string countdownStr = to_string(countdown);
+            DrawText(countdownStr.data(), 500, 200, 20, WHITE);
+            EndDrawing();
+            if (countdown < 0)
+            {
+                isGameStarted = false;
+                startLoop = false;
+                score = 0;
+                lives = 3;
+                ballX = 400.0f;
+                ballY = 200.0f;
+                ballSpeedX = 300.0f;
+                ballSpeedY = 300.0f;
+                posX = 350.0f;
+                for (int i = 0; i < ROWS_OF_BLOCKS; i++)
+                {
+                    for (int j = 0; j < COLUMNS_OF_BLOCKS; j++)
+                    {
+                        float x = blockSpace + j * (blockWidth + blockSpace);
+                        float y = blockSpace + i * (blockHeight + blockSpace);
+                        blocks[i][j] = new block({x, y}, true);
+                    }
+                }
+            }
+            continue;
         }
         if (lives != 0)
         {
