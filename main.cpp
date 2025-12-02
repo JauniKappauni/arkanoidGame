@@ -69,6 +69,11 @@ int quantity = ROWS_OF_BLOCKS * COLUMNS_OF_BLOCKS;
 int main()
 {
     InitWindow(screenWidth, screenHeight, "Arkanoid");
+    InitAudioDevice();
+    Sound hit = LoadSound("resources/arkanoid-sfx-1.mp3");
+    Sound noHit = LoadSound("resources/arkanoid-sfx-2.mp3");
+    Sound gameStart = LoadSound("resources/arkanoid-sfx-9.mp3");
+    Sound gameOver = LoadSound("resources/arkanoid-sfx-11.mp3");
     for (int i = 0; i < ROWS_OF_BLOCKS; i++)
     {
         for (int j = 0; j < COLUMNS_OF_BLOCKS; j++)
@@ -95,6 +100,7 @@ int main()
             if (CheckCollisionPointRec(mouse, btn) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
             {
                 isGameStarted = true;
+                PlaySound(gameStart);
             }
             if (CheckCollisionPointRec(mouse, btn2) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
             {
@@ -179,6 +185,7 @@ int main()
             if (ballY < 0)
             {
                 ballSpeedY *= -1;
+                PlaySound(noHit);
             }
             if (ballY >= 390 && ballX >= posX && ballX <= posX + 100)
             {
@@ -187,15 +194,18 @@ int main()
             if (ballX > screenWidth)
             {
                 ballSpeedX *= -1;
+                PlaySound(noHit);
             }
             if (ballX < 0)
             {
                 ballSpeedX *= -1;
+                PlaySound(noHit);
             }
             if (ballY > screenHeight)
             {
                 lives--;
                 ballY = 200.0f;
+                PlaySound(gameOver);
             }
             for (int i = 0; i < ROWS_OF_BLOCKS; i++)
             {
@@ -214,6 +224,7 @@ int main()
                         ballSpeedY *= -1;
                         score++;
                         ballSpeedY = ballSpeedY ? ballSpeedY + score : ballSpeedY - score;
+                        PlaySound(hit);
                     }
                 }
             }
@@ -256,6 +267,7 @@ int main()
             if (CheckCollisionPointRec(mouse, btn) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
             {
                 isGameStarted = true;
+                PlaySound(gameStart);
             }
             if (CheckCollisionPointRec(mouse, btn2) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
             {
@@ -264,6 +276,11 @@ int main()
             continue;
         }
     }
+    UnloadSound(hit);
+    UnloadSound(noHit);
+    UnloadSound(gameStart);
+    UnloadSound(gameOver);
+    CloseAudioDevice();
     CloseWindow();
     return 0;
 }
