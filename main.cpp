@@ -24,6 +24,7 @@ float blockSpace = 5.0f;
 int score = 0;
 int lives = 3;
 bool isGameStarted = false;
+bool startLoop = false;
 
 class block
 {
@@ -96,6 +97,21 @@ int main()
             }
             continue;
         }
+        if (!startLoop)
+        {
+            if (!startLoop)
+            {
+                BeginDrawing();
+                ClearBackground(BLACK);
+                DrawText("Press Space to start game loop", 400, 200, 20, WHITE);
+                if (IsKeyPressed(KEY_SPACE))
+                {
+                    startLoop = true;
+                }
+                EndDrawing();
+                continue;
+            }
+        }
         if (lives != 0)
         {
             float dt = GetFrameTime();
@@ -164,6 +180,7 @@ int main()
         else
         {
             isGameStarted = false;
+            startLoop = false;
             score = 0;
             lives = 3;
             ballX = 400.0f;
