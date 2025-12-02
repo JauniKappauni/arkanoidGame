@@ -22,6 +22,8 @@ float blockHeight = 25.0f;
 float blockSpace = 5.0f;
 
 int score = 0;
+int lives = 3;
+bool isGameStarted = false;
 
 class block
 {
@@ -72,61 +74,89 @@ int main()
     }
     while (!WindowShouldClose())
     {
-        float dt = GetFrameTime();
-        BeginDrawing();
-
-        ClearBackground(BLACK);
-
-        DrawLine(posX, 390, posX + 100, 390, WHITE);
-        if (IsKeyDown(KEY_A) && posX > 0)
+        if (!isGameStarted)
         {
-            posX -= speed * dt;
-        }
-        if (IsKeyDown(KEY_D) && posX < screenWidth - 100)
-        {
-            posX += speed * dt;
-        }
-        DrawCircle(ballX, ballY, ballR, WHITE);
-        ballX += ballSpeedX * dt;
-        ballY += ballSpeedY * dt;
-        if (ballY < 0)
-        {
-            ballSpeedY *= -1;
-        }
-        if (ballY >= 390 && ballX >= posX && ballX <= posX + 100)
-        {
-            ballSpeedY *= -1;
-        }
-        if (ballX > screenWidth)
-        {
-            ballSpeedX *= -1;
-        }
-        if (ballX < 0)
-        {
-            ballSpeedX *= -1;
-        }
-        for (int i = 0; i < ROWS_OF_BLOCKS; i++)
-        {
-            for (int j = 0; j < COLUMNS_OF_BLOCKS; j++)
+            Vector2 mouse = GetMousePosition();
+            Rectangle btn = {300, 150, 200, 100};
+            BeginDrawing();
+            ClearBackground(BLACK);
+            DrawRectangleRec(btn, GRAY);
+            DrawText("Start", 380, 180, 20, WHITE);
+            EndDrawing();
+            if (CheckCollisionPointRec(mouse, btn) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
             {
-                block *b = blocks[i][j];
-                if (!b->isActive())
-                    continue;
+                isGameStarted = true;
+            }
+            continue;
+        }
+        if (lives != 0)
+        {
+            float dt = GetFrameTime();
+            BeginDrawing();
+            ClearBackground(BLACK);
 
-                Vector2 pos = b->getPos();
-
-                DrawRectangle(pos.x, pos.y, blockWidth, blockHeight, WHITE);
-                if (ballX >= pos.x && ballX <= pos.x + blockWidth && ballY > pos.y && ballY < pos.y + blockHeight)
+            DrawLine(posX, 390, posX + 100, 390, WHITE);
+            if (IsKeyDown(KEY_A) && posX > 0)
+            {
+                posX -= speed * dt;
+            }
+            if (IsKeyDown(KEY_D) && posX < screenWidth - 100)
+            {
+                posX += speed * dt;
+            }
+            DrawCircle(ballX, ballY, ballR, WHITE);
+            ballX += ballSpeedX * dt;
+            ballY += ballSpeedY * dt;
+            if (ballY < 0)
+            {
+                ballSpeedY *= -1;
+            }
+            if (ballY >= 390 && ballX >= posX && ballX <= posX + 100)
+            {
+                ballSpeedY *= -1;
+            }
+            if (ballX > screenWidth)
+            {
+                ballSpeedX *= -1;
+            }
+            if (ballX < 0)
+            {
+                ballSpeedX *= -1;
+            }
+            if (ballY > screenHeight)
+            {
+                lives--;
+                ballY = 200.0f;
+            }
+            for (int i = 0; i < ROWS_OF_BLOCKS; i++)
+            {
+                for (int j = 0; j < COLUMNS_OF_BLOCKS; j++)
                 {
-                    b->deactive();
-                    ballSpeedY *= -1;
-                    score++;
+                    block *b = blocks[i][j];
+                    if (!b->isActive())
+                        continue;
+
+                    Vector2 pos = b->getPos();
+
+                    DrawRectangle(pos.x, pos.y, blockWidth, blockHeight, WHITE);
+                    if (ballX >= pos.x && ballX <= pos.x + blockWidth && ballY > pos.y && ballY < pos.y + blockHeight)
+                    {
+                        b->deactive();
+                        ballSpeedY *= -1;
+                        score++;
+                    }
                 }
             }
+            string scoreStr = to_string(score);
+            DrawText(scoreStr.data(), 10, 10, 25, RED);
+            string livesStr = to_string(lives);
+            DrawText(livesStr.data(), 10, 375, 25, WHITE);
+            EndDrawing();
         }
-        string scoreStr = to_string(score);
-        DrawText(scoreStr.data(), 10, 10, 25, RED);
-        EndDrawing();
+        else
+        {
+            CloseWindow();
+        }
     }
     CloseWindow();
     return 0;
