@@ -162,6 +162,23 @@ int main()
         }
         else
         {
+            isGameStarted = false;
+            score = 0;
+            lives = 3;
+            ballX = 400.0f;
+            ballY = 200.0f;
+            ballSpeedX = 300.0f;
+            ballSpeedY = 300.0f;
+            posX = 350.0f;
+            for (int i = 0; i < ROWS_OF_BLOCKS; i++)
+            {
+                for (int j = 0; j < COLUMNS_OF_BLOCKS; j++)
+                {
+                    float x = blockSpace + j * (blockWidth + blockSpace);
+                    float y = blockSpace + i * (blockHeight + blockSpace);
+                    blocks[i][j] = new block({x, y}, true);
+                }
+            }
             Vector2 mouse = GetMousePosition();
             Rectangle btn = {300, 100, 200, 100};
             Rectangle btn2 = {300, 250, 200, 100};
