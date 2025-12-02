@@ -151,6 +151,7 @@ int main()
                         b->deactive();
                         ballSpeedY *= -1;
                         score++;
+                        ballSpeedY = ballSpeedY ? ballSpeedY + score : ballSpeedY - score;
                     }
                 }
             }
