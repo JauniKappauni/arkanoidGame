@@ -1,5 +1,6 @@
 #include <raylib.h>
 #include <string>
+#include "block.h"
 using namespace std;
 #define ROWS_OF_BLOCKS 5
 #define COLUMNS_OF_BLOCKS 14
@@ -31,28 +32,7 @@ int countdown = 3;
 bool countdownActive = false;
 bool pauseMenuActive = false;
 
-class block
-{
-private:
-    Vector2 pos;
-    bool active;
 
-public:
-    block(Vector2 x, bool active);
-    ~block();
-    bool isActive()
-    {
-        return active;
-    }
-    void deactive()
-    {
-        active = false;
-    }
-    Vector2 getPos()
-    {
-        return pos;
-    }
-};
 
 block::block(Vector2 x, bool y)
 {
