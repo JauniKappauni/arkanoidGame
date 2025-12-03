@@ -29,6 +29,7 @@ bool startLoop = false;
 float timerStart = 0.0f;
 int countdown = 3;
 bool countdownActive = false;
+bool pauseMenuActive = false;
 
 class block
 {
@@ -85,6 +86,18 @@ int main()
     }
     while (!WindowShouldClose())
     {
+        if (IsKeyPressed(KEY_P))
+        {
+            pauseMenuActive = !pauseMenuActive;
+        }
+        if (pauseMenuActive)
+        {
+            BeginDrawing();
+            ClearBackground(BLACK);
+            DrawText("Pause Menu", 400, 200, 50, WHITE);
+            EndDrawing();
+            continue;
+        }
         if (!isGameStarted)
         {
             Vector2 mouse = GetMousePosition();
