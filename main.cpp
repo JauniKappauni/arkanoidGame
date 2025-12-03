@@ -71,6 +71,7 @@ int main()
 {
     InitWindow(screenWidth, screenHeight, "Arkanoid");
     InitAudioDevice();
+    SetExitKey(KEY_NULL);
     Sound hit = LoadSound("resources/arkanoid-sfx-1.mp3");
     Sound noHit = LoadSound("resources/arkanoid-sfx-2.mp3");
     Sound gameStart = LoadSound("resources/arkanoid-sfx-9.mp3");
