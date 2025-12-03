@@ -18,6 +18,12 @@ float ballR = 5.0f;
 float ballSpeedX = 200.0f;
 float ballSpeedY = 200.0f;
 
+float ball2X = 500.0f;
+float ball2Y = 200.0f;
+float ball2R = 5.0f;
+float ball2SpeedX = 200.0f;
+float ball2SpeedY = 200.0f;
+
 float blockWidth = 50.0f;
 float blockHeight = 25.0f;
 float blockSpace = 5.0f;
@@ -145,6 +151,10 @@ int main()
                 ballY = 200.0f;
                 ballSpeedX = 300.0f;
                 ballSpeedY = 300.0f;
+                ball2X = 400.0f;
+                ball2Y = 200.0f;
+                ball2SpeedX = 300.0f;
+                ball2SpeedY = 300.0f;
                 posX = 350.0f;
                 for (int i = 0; i < ROWS_OF_BLOCKS; i++)
                 {
@@ -158,7 +168,7 @@ int main()
             }
             continue;
         }
-        if (lives != 0)
+        if (lives > 0)
         {
             float dt = GetFrameTime();
             BeginDrawing();
@@ -174,8 +184,11 @@ int main()
                 posX += speed * dt;
             }
             DrawCircle(ballX, ballY, ballR, WHITE);
+            DrawCircle(ball2X, ball2Y, ball2R, WHITE);
             ballX += ballSpeedX * dt;
             ballY += ballSpeedY * dt;
+            ball2X += ball2SpeedX * dt;
+            ball2Y += ball2SpeedY * dt;
             if (ballY < 0)
             {
                 ballSpeedY *= -1;
@@ -201,6 +214,31 @@ int main()
                 ballY = 200.0f;
                 PlaySound(gameOver);
             }
+            if (ball2Y < 0)
+            {
+                ball2SpeedY *= -1;
+                PlaySound(noHit);
+            }
+            if (ball2Y >= 390 && ball2X >= posX && ball2X <= posX + 100)
+            {
+                ball2SpeedY *= -1;
+            }
+            if (ball2X > screenWidth)
+            {
+                ball2SpeedX *= -1;
+                PlaySound(noHit);
+            }
+            if (ball2X < 0)
+            {
+                ball2SpeedX *= -1;
+                PlaySound(noHit);
+            }
+            if (ball2Y > screenHeight)
+            {
+                lives--;
+                ball2Y = 200.0f;
+                PlaySound(gameOver);
+            }
             for (int i = 0; i < ROWS_OF_BLOCKS; i++)
             {
                 for (int j = 0; j < COLUMNS_OF_BLOCKS; j++)
@@ -218,6 +256,14 @@ int main()
                         ballSpeedY *= -1;
                         score++;
                         ballSpeedY = ballSpeedY ? ballSpeedY + score : ballSpeedY - score;
+                        PlaySound(hit);
+                    }
+                    if (ball2X >= pos.x && ball2X <= pos.x + blockWidth && ball2Y > pos.y && ball2Y < pos.y + blockHeight)
+                    {
+                        b->deactive();
+                        ball2SpeedY *= -1;
+                        score++;
+                        ball2SpeedY = ball2SpeedY ? ball2SpeedY + score : ball2SpeedY - score;
                         PlaySound(hit);
                     }
                 }
@@ -238,6 +284,10 @@ int main()
             ballY = 200.0f;
             ballSpeedX = 300.0f;
             ballSpeedY = 300.0f;
+            ball2X = 400.0f;
+            ball2Y = 200.0f;
+            ball2SpeedX = 300.0f;
+            ball2SpeedY = 300.0f;
             posX = 350.0f;
             for (int i = 0; i < ROWS_OF_BLOCKS; i++)
             {
