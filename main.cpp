@@ -1,6 +1,7 @@
 #include <raylib.h>
 #include <string>
 #include "block.h"
+#include "ball.h"
 using namespace std;
 #define ROWS_OF_BLOCKS 5
 #define COLUMNS_OF_BLOCKS 14
@@ -12,17 +13,8 @@ float posX = 350.0f;
 
 float speed = 500.0f;
 
-float ballX = 400.0f;
-float ballY = 200.0f;
-float ballR = 5.0f;
-float ballSpeedX = 200.0f;
-float ballSpeedY = 200.0f;
-
-float ball2X = 500.0f;
-float ball2Y = 200.0f;
-float ball2R = 5.0f;
-float ball2SpeedX = 200.0f;
-float ball2SpeedY = 200.0f;
+ball ball1;
+ball ball2;
 
 float blockWidth = 50.0f;
 float blockHeight = 25.0f;
@@ -135,14 +127,8 @@ int main()
                 startLoop = false;
                 score = 0;
                 lives = 3;
-                ballX = 400.0f;
-                ballY = 200.0f;
-                ballSpeedX = 300.0f;
-                ballSpeedY = 300.0f;
-                ball2X = 400.0f;
-                ball2Y = 200.0f;
-                ball2SpeedX = 300.0f;
-                ball2SpeedY = 300.0f;
+                ball1.resetBall();
+                ball2.resetBall();
                 posX = 350.0f;
                 for (int i = 0; i < ROWS_OF_BLOCKS; i++)
                 {
@@ -171,60 +157,60 @@ int main()
             {
                 posX += speed * dt;
             }
-            DrawCircle(ballX, ballY, ballR, WHITE);
-            DrawCircle(ball2X, ball2Y, ball2R, WHITE);
-            ballX += ballSpeedX * dt;
-            ballY += ballSpeedY * dt;
-            ball2X += ball2SpeedX * dt;
-            ball2Y += ball2SpeedY * dt;
-            if (ballY < 0)
+            DrawCircle(ball1.x, ball1.y, ball1.r, WHITE);
+            DrawCircle(ball2.x, ball2.y, ball2.r, WHITE);
+            ball1.x += ball1.speedX * dt;
+            ball1.y += ball1.speedY * dt;
+            ball2.x += ball2.speedX * dt;
+            ball2.y += ball2.speedY * dt;
+            if (ball1.y < 0)
             {
-                ballSpeedY *= -1;
+                ball1.speedY *= -1;
                 PlaySound(noHit);
             }
-            if (ballY >= 390 && ballX >= posX && ballX <= posX + 100)
+            if (ball1.y >= 390 && ball1.x >= posX && ball1.x <= posX + 100)
             {
-                ballSpeedY *= -1;
+                ball1.speedY *= -1;
             }
-            if (ballX > screenWidth)
+            if (ball1.x > screenWidth)
             {
-                ballSpeedX *= -1;
+                ball1.speedX *= -1;
                 PlaySound(noHit);
             }
-            if (ballX < 0)
+            if (ball1.x < 0)
             {
-                ballSpeedX *= -1;
+                ball1.speedX *= -1;
                 PlaySound(noHit);
             }
-            if (ballY > screenHeight)
+            if (ball1.y > screenHeight)
             {
                 lives--;
-                ballY = 200.0f;
+                ball1.y = 200.0f;
                 PlaySound(gameOver);
             }
-            if (ball2Y < 0)
+            if (ball2.y < 0)
             {
-                ball2SpeedY *= -1;
+                ball2.speedY *= -1;
                 PlaySound(noHit);
             }
-            if (ball2Y >= 390 && ball2X >= posX && ball2X <= posX + 100)
+            if (ball2.y >= 390 && ball2.x >= posX && ball2.x <= posX + 100)
             {
-                ball2SpeedY *= -1;
+                ball2.speedY *= -1;
             }
-            if (ball2X > screenWidth)
+            if (ball2.x > screenWidth)
             {
-                ball2SpeedX *= -1;
+                ball2.speedX *= -1;
                 PlaySound(noHit);
             }
-            if (ball2X < 0)
+            if (ball2.x < 0)
             {
-                ball2SpeedX *= -1;
+                ball2.speedX *= -1;
                 PlaySound(noHit);
             }
-            if (ball2Y > screenHeight)
+            if (ball2.y > screenHeight)
             {
                 lives--;
-                ball2Y = 200.0f;
+                ball2.y = 200.0f;
                 PlaySound(gameOver);
             }
             for (int i = 0; i < ROWS_OF_BLOCKS; i++)
@@ -238,20 +224,20 @@ int main()
                     Vector2 pos = b->getPos();
 
                     DrawRectangle(pos.x, pos.y, blockWidth, blockHeight, WHITE);
-                    if (ballX >= pos.x && ballX <= pos.x + blockWidth && ballY > pos.y && ballY < pos.y + blockHeight)
+                    if (ball1.x >= pos.x && ball1.x <= pos.x + blockWidth && ball1.y > pos.y && ball1.y < pos.y + blockHeight)
                     {
                         b->deactive();
-                        ballSpeedY *= -1;
+                        ball1.speedY *= -1;
                         score++;
-                        ballSpeedY = ballSpeedY ? ballSpeedY + score : ballSpeedY - score;
+                        ball1.speedY = ball1.speedY ? ball1.speedY + score : ball1.speedY - score;
                         PlaySound(hit);
                     }
-                    if (ball2X >= pos.x && ball2X <= pos.x + blockWidth && ball2Y > pos.y && ball2Y < pos.y + blockHeight)
+                    if (ball2.x >= pos.x && ball2.x <= pos.x + blockWidth && ball2.y > pos.y && ball2.y < pos.y + blockHeight)
                     {
                         b->deactive();
-                        ball2SpeedY *= -1;
+                        ball2.speedY *= -1;
                         score++;
-                        ball2SpeedY = ball2SpeedY ? ball2SpeedY + score : ball2SpeedY - score;
+                        ball2.speedY = ball2.speedY ? ball2.speedY + score : ball2.speedY - score;
                         PlaySound(hit);
                     }
                 }
@@ -268,14 +254,8 @@ int main()
             startLoop = false;
             score = 0;
             lives = 3;
-            ballX = 400.0f;
-            ballY = 200.0f;
-            ballSpeedX = 300.0f;
-            ballSpeedY = 300.0f;
-            ball2X = 400.0f;
-            ball2Y = 200.0f;
-            ball2SpeedX = 300.0f;
-            ball2SpeedY = 300.0f;
+            ball1.resetBall();
+            ball2.resetBall();
             posX = 350.0f;
             for (int i = 0; i < ROWS_OF_BLOCKS; i++)
             {
