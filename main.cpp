@@ -38,18 +38,6 @@ int countdown = 3;
 bool countdownActive = false;
 bool pauseMenuActive = false;
 
-
-
-block::block(Vector2 x, bool y)
-{
-    pos = x;
-    active = y;
-}
-
-block::~block()
-{
-}
-
 block *blocks[ROWS_OF_BLOCKS][COLUMNS_OF_BLOCKS];
 int quantity = ROWS_OF_BLOCKS * COLUMNS_OF_BLOCKS;
 

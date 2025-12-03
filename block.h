@@ -23,3 +23,13 @@ public:
         return pos;
     }
 };
+
+block::block(Vector2 x, bool y)
+{
+    pos = x;
+    active = y;
+}
+
+block::~block()
+{
+}
