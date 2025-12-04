@@ -62,6 +62,24 @@ int main()
             BeginDrawing();
             ClearBackground(BLACK);
             DrawText("Pause Menu", 400, 200, 50, WHITE);
+            Vector2 mouse = GetMousePosition();
+            Rectangle btn = {300, 100, 200, 100};
+            Rectangle btn2 = {300, 250, 200, 100};
+            ClearBackground(BLACK);
+            DrawRectangleRec(btn, GRAY);
+            DrawRectangleRec(btn2, GRAY);
+            DrawText("Resume", 370, 150, 20, WHITE);
+            DrawText("Quit", 370, 300, 20, WHITE);
+            if (CheckCollisionPointRec(mouse, btn) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+            {
+                pauseMenuActive = false;
+                PlaySound(gameStart);
+            }
+
+            if (CheckCollisionPointRec(mouse, btn2) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+            {
+                CloseWindow();
+            }
             EndDrawing();
             continue;
         }
